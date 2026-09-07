@@ -1,16 +1,16 @@
+console.log(">>> main.js EXECUTED <<<");
+
 import "./style.css"
 
 import * as THREE from "three"
 
 const scene = new THREE.Scene()
-
 const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+const container = document.getElementById('canvas-container');
+const renderer = new THREE.WebGLRenderer({ antialias: true });
 
-const renderer  = new THREE.WebGLRenderer();
-
-renderer.setSize(window.innerWidth, window.innerHeight);
-
-document.body.appendChild(renderer.domElement);
+renderer.setSize(container.clientWidth, container.clientHeight);
+container.appendChild(renderer.domElement);
 
 camera.position.z = 5;
 
@@ -31,6 +31,20 @@ scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 
 scene.add(new THREE.DirectionalLight(0xffffff, 1));
 
+// Cookie Counter
+let counter = 0;
+
+function update_counter() {
+  counter += 1;
+  console.log("+1, counter =", counter);
+
+  const clicksCountText = document.getElementById("clicks-count");
+
+  if (clicksCountText) {
+    clicksCountText.setAttribute("count-text", `${counter} Clicks`);
+  }
+}
+
 function animate() {
     requestAnimationFrame(animate);
     cube.rotation.x += 0.01;
@@ -41,4 +55,8 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-animate()
+document.getElementById("clicker").addEventListener("click", () => {
+    update_counter();
+});
+
+animate();
